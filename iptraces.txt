@@ -1,0 +1,2 @@
+traces/trace1.pcap
+traces/trace2.pcap

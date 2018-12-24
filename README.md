@@ -29,8 +29,9 @@ Ubuntu with g++ and make
 - Ensure the necessary library PcapPlusPlus is installed.
     - You can refer to [PcapPlusPlus Web-site](https://seladb.github.io/PcapPlusPlus-Doc/download.html) to install the library.
 
-- Specify the pcap files in "iptraces.txt". We provide two pcap files [here](https://seladb.github.io/PcapPlusPlus-Doc/download.html) for
-  testing in the trace folder.
+- Specify the pcap files in "iptraces.txt". We provide two pcap files [here](https://drive.google.com/file/d/1BXilxUKTK18rZzRcfQIjBWnE1X8QF2B9/view?usp=sharing) for
+  testing. One pcap file is regarded as one epoch in our examples. To run the 
+  heavy changer example, you need to specify at least two pcap files.
 
 #### Compile
 - Compile examples with make
@@ -40,7 +41,7 @@ Ubuntu with g++ and make
     $ make main_changer
     $ make main_simd
 ```
-- To compile the SIMD example, you need to make sure your CPU and compile can support AVX and AVX2.
+- To compile the SIMD example, you need to make sure your CPU and compiler can support AVX and AVX2.
     - Check your CPU with the command to make sure the flags contain "avx" and "avx2"
     ```
     $ cat /proc/cpuinfo

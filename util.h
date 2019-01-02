@@ -13,7 +13,7 @@ static inline double now_us ()
 {
     struct timespec tv;
     clock_gettime(CLOCK_MONOTONIC, &tv);
-    return (tv.tv_sec * (uint64_t) 1000000 + (double)tv.tv_nsec/1000);
+    return (tv.tv_sec * (uint64_t) 1000000000 + (double)tv.tv_nsec);
 }
 
 static inline void *memcpy_8(void *dst, const void *src) {

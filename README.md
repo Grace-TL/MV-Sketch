@@ -21,17 +21,20 @@ _INFOCOM 2019_
 
 ### Compile and Run the examples
 MV-Sketch is implemented with C++. We show how to compile the examples on
-Ubuntu with g++ and make
+Ubuntu with g++ and make.
 
 #### Requirements
-- Ensure __g++__ and __make__ are installed. 
+- Ensure __g++__ and __make__ are installed.  Our experimental platform is
+  equipped with Ubuntu 14.04, g++ 4.8.4 and make 3.81.
 
-- Ensure the necessary library PcapPlusPlus is installed.
-    - You can refer to [PcapPlusPlus Web-site](https://seladb.github.io/PcapPlusPlus-Doc/download.html) to install the library.
+- Ensure the necessary library libpcap is installed.
+    - It can be installed in most Linux distributions (e.g., apt-get install
+      libpacap-dev in Ubuntu).
 
-- Specify the pcap files in "iptraces.txt". We provide two pcap files [here](https://drive.google.com/file/d/1BXilxUKTK18rZzRcfQIjBWnE1X8QF2B9/view?usp=sharing) for
-  testing. One pcap file is regarded as one epoch in our examples. To run the 
-  heavy changer example, you need to specify at least two pcap files.
+- Specify the pcap files in "iptraces.txt". We provide two simple pcap files
+  in the traces folder for testing. One pcap file is regarded as one epoch in
+  our examples. To run the heavy changer example, you need to specify at least
+  two pcap files.
 
 #### Compile
 - Compile examples with make

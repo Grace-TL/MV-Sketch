@@ -1,5 +1,5 @@
 #include "mvsketch.hpp"
-#include "inputadaptor.hpp"
+#include "adaptor.hpp"
 #include <unordered_map>
 #include <utility>
 #include <iomanip>
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     for (std::string file; getline(tracefiles, file);) {
 
         //load traces
-        InputAdaptor* adaptor =  new InputAdaptor(file, buf_size);
+        Adaptor* adaptor =  new Adaptor(file, buf_size);
         std::cout << "[Dataset]: " << file << std::endl;
         std::cout << "[Message] Finish read data." << std::endl;
 
@@ -61,7 +61,6 @@ int main(int argc, char* argv[]) {
         std::cout << "[Message] Finish Insert hash table" << std::endl;
         val_tp threshold = thresh*sum;
 
-
         //Create sketch
         MVSketch* mv = new MVSketch(mv_depth, mv_width, 8*LGN);
 
@@ -74,14 +73,14 @@ int main(int argc, char* argv[]) {
             mv->Update((unsigned char*)&(t.key), (val_tp)t.size);
         }
         t2 = now_us();
-        throughput = adaptor->GetDataSize()/(double)(t2-t1)*1000000;
-
+        throughput = adaptor->GetDataSize()/(double)(t2-t1)*1000000000;
+        std::cout << "time = " << (double)(t2-t1)*1000000000 << std::endl;
         //Query sketch
         results.clear();
         t1 = now_us();
         mv->Query(threshold, results);
         t2 = now_us();
-        detectime = (double)(t2-t1)/1000000;
+        detectime = (double)(t2-t1)/1000000000;
 
         //Evaluate accuracy
         int tp = 0, cnt = 0;;

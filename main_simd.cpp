@@ -1,5 +1,5 @@
 #include "mvsketch_simd.hpp"
-#include "inputadaptor.hpp"
+#include "adaptor.hpp"
 #include <unordered_map>
 #include <utility>
 #include <iomanip>
@@ -12,16 +12,15 @@ int main(int argc, char* argv[]) {
 
 
     //Confiture parameter
-
-    //Dataset list
+    //Dataset filename
     const char* filenames = "iptraces.txt";
     unsigned long long buf_size = 5000000000;
     //Heavy hitter threshold
     double thresh = 0.0008;
 
-    //SS sketch parameters
-    int ss_width = 1366; //number of buckets in each row
-    int ss_depth = 4; //number of rows
+    //mv sketch parameters
+    int mv_width = 1366; //number of buckets in each row
+    int mv_depth = 4; //number of rows
 
     //evaluation
     std::vector<std::pair<key_tp, val_tp> > results;
@@ -38,7 +37,7 @@ int main(int argc, char* argv[]) {
     for (std::string file; getline(tracefiles, file);) {
 
         //load traces
-        InputAdaptor* adaptor =  new InputAdaptor(file, buf_size);
+        Adaptor* adaptor =  new Adaptor(file, buf_size);
         std::cout << "[Dataset]: " << file << std::endl;
         std::cout << "[Message] Finish read data." << std::endl;
 
@@ -60,10 +59,8 @@ int main(int argc, char* argv[]) {
         }
         std::cout << "[Message] Finish Insert hash table" << std::endl;
         val_tp threshold = thresh*sum;
-
-
         //Create sketch
-        MVSketchSIMD* ss = new MVSketchSIMD(ss_depth, ss_width, LGN*8);
+        MVSketchSIMD* mv = new MVSketchSIMD(mv_depth, mv_width, LGN*8);
 
         //Update sketch
         uint64_t t1=0, t2=0;
@@ -71,17 +68,17 @@ int main(int argc, char* argv[]) {
         memset(&t, 0, sizeof(tuple_t));
         t1 = now_us();
         while(adaptor->GetNext(&t) == 1) {
-            ss->Update((unsigned char*)&(t.key), (val_tp)t.size);
+            mv->Update((unsigned char*)&(t.key), (val_tp)t.size);
         }
         t2 = now_us();
-        throughput = adaptor->GetDataSize()/(double)(t2-t1)*1000000;
+        throughput = adaptor->GetDataSize()/(double)(t2-t1)*1000000000;
 
         //Query sketch
         results.clear();
         t1 = now_us();
-        ss->Query(threshold, results);
+        mv->Query(threshold, results);
         t2 = now_us();
-        detectime = (double)(t2-t1)/1000000;
+        detectime = (double)(t2-t1)/1000000000;
 
         //Evaluate accuracy
         int tp = 0, cnt = 0;;
@@ -102,7 +99,7 @@ int main(int argc, char* argv[]) {
         error = error/tp;
 
         avpre += precision; avrec += recall; averr += error; avthr += throughput; avdet += detectime;
-        delete ss;
+        delete mv;
         delete adaptor;
 
         numfile++;

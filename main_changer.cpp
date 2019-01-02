@@ -1,5 +1,5 @@
 #include "heavy_changer.hpp"
-#include "inputadaptor.hpp"
+#include "adaptor.hpp"
 #include <unordered_map>
 #include <utility>
 #include "util.h"
@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
     for (std::string file; getline(tracefiles, file);) {
         //load traces and get ground
 
-        InputAdaptor* adaptor =  new InputAdaptor(file, buf_size);
+        Adaptor* adaptor =  new Adaptor(file, buf_size);
         std::cout << "[Dataset]: " << file << std::endl;
         memset(&t, 0, sizeof(tuple_t));
 
@@ -97,13 +97,14 @@ int main(int argc, char* argv[]) {
         uint64_t t1, t2;
         //Update mv
         adaptor->Reset();
-        t1 = now_us();
         heavychangermv->Reset();
+        MVSketch* cursk = (MVSketch*)heavychangermv->GetCurSketch();
+        t1 = now_us();
         while(adaptor->GetNext(&t) == 1) {
-            heavychangermv->Update((unsigned char*)&(t.key), (val_tp)t.size);
+            cursk->Update((unsigned char*)&(t.key), (val_tp)t.size);
         }
         t2 = now_us();
-        throughput = adaptor->GetDataSize()/(double)(t2-t1)*1000000;
+        throughput = adaptor->GetDataSize()/(double)(t2-t1)*1000000000;
         if (numfile != 0) {
             std::vector<std::pair<key_tp, val_tp> > results;
             //Query
@@ -112,7 +113,7 @@ int main(int argc, char* argv[]) {
             t1 = now_us();
             heavychangermv->Query(threshold, results);
             t2 = now_us();
-            detectime = (double)(t2-t1)/1000000;
+            detectime = (double)(t2-t1)/1000000000;
             //Evaluate accuracy
 
             int tp = 0, cnt = 0;;
@@ -131,9 +132,8 @@ int main(int argc, char* argv[]) {
             precision = tp*1.0/results.size();
             recall = tp*1.0/cnt;
             error = error/tp;
-            avthr += throughput;
         }
-        avpre += precision; avrec += recall; averr += error; avdet += detectime;
+        avpre += precision; avrec += recall; averr += error; avdet += detectime; avthr += throughput;
         numfile++;
         delete adaptor;
     }
@@ -168,6 +168,6 @@ int main(int argc, char* argv[]) {
             << std::left << "Detection Time" << std::endl;
             std::cout << std::setw(20) <<  "MVSketch";
             std::cout  << std::setw(20) << std::left << avpre/(numfile-1) << std::setw(20) << std::left << avrec/(numfile-1) << std::setw(20)
-                << std::left << averr/(numfile-1) << std::setw(20) << std::left << avthr/(numfile-1) << std::setw(20)
+                << std::left << averr/(numfile-1) << std::setw(20) << std::left << avthr/(numfile) << std::setw(20)
                 << std::left << avdet/(numfile-1) << std::endl;
 }

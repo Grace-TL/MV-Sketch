@@ -2,27 +2,20 @@ EXEC += main_hitter main_changer main_simd
 all: $(EXEC)
 
 CFLAGS = -Wall -std=c++11 -O3
-CFLAGS += -D TRACE_DIR_RAM
-
-HEADER += hash.h datatypes.hpp  inputadaptor.hpp util.h 
-SRC += hash.c inputadaptor.cpp
+HEADER += hash.h datatypes.hpp util.h adaptor.hpp 
+SRC += hash.c adaptor.cpp
 SKETCHHEADER += mvsketch.hpp
 SKETCHSRC += mvsketch.cpp
-LIBS= -static-libstdc++ -lPcap++ -lPacket++ -lCommon++ -lpcap -lpthread -lgmp -std=gnu++11
-INCLUDES=-I/usr/local/include/pcapplusplus/
-#INCLUDESIMD= -I/home/ltang/Workspace/research/MV-Sketch/lib/FastMemcpy
+LIBS= -lpcap 
 
+main_changer: main_changer.cpp $(SRC) $(HEADER) $(SKETCHHEADER)
+	g++ $(CFLAGS) $(INCLUDES) -o $@ $< $(SRC) $(SKETCHSRC) $(LIBS)
 
-main_changer: main_changer.cpp $(SRC) $(SKETCHSRC) $(HEADER) $(SKETCHHEADER)
-	g++ $(CFLAGS) $(INCLUDES) -o $@ $< $(SRC) $(SKETCHSRC) $(LIBS) -lm -ldl
+main_hitter: main_hitter.cpp $(SRC) $(HEADER) $(SKETCHHEADER) 
+	g++ $(CFLAGS) $(INCLUDES) -o $@ $< $(SRC) $(SKETCHSRC) $(LIBS) 
 
-main_hitter: main_hitter.cpp $(SRC) $(SKETCHSRC) $(HEADER) $(SKETCHHEADER) 
-	g++ $(CFLAGS) $(INCLUDES) -o $@ $< $(SRC) $(SKETCHSRC) $(LIBS) -lm -ldl 
-
-main_simd: main_simd.cpp $(SRC) $(HEADER)
-	g++ $(CFLAGS) -mavx2 -mfma $(INCLUDES) $(INCLUDESIMD) -o $@ $< $(SRC) $(SKETCHSRC) mvsketch_simd.cpp $(LIBS) -ldl -lm 
-
-
+main_simd: main_simd.cpp $(SRC) $(HEADER) mvsketch_simd.hpp
+	g++ $(CFLAGS) -mavx2 -o $@ $< $(SRC) mvsketch_simd.cpp $(LIBS) 
 
 clean:
 	rm -rf $(EXEC)

@@ -29,12 +29,16 @@ Ubuntu with g++ and make.
 
 - Ensure the necessary library libpcap is installed.
     - It can be installed in most Linux distributions (e.g., apt-get install
-      libpacap-dev in Ubuntu).
+      libpcap-dev in Ubuntu).
 
-- Specify the pcap files in "iptraces.txt". We provide two simple pcap files
-  in the traces folder for testing. One pcap file is regarded as one epoch in
-  our examples. To run the heavy changer example, you need to specify at least
-  two pcap files.
+- Prepare the pcap files.
+    - We provide two small pcap files
+      [here](https://drive.google.com/file/d/1WLEjB-w4ZlNshl1vUMb98rrowFuMBWuJ/view?usp=sharing).
+      You can download and put them in the "traces" folder for testing.  
+    - Specify the path of each pcap file in "iptraces.txt". 
+    - Note that one pcap file is regarded as one epoch in our examples. To run
+      the heavy changer example, you need to specify at least two pcap files.
+      
 
 #### Compile
 - Compile examples with make

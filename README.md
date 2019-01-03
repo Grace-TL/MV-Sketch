@@ -11,7 +11,7 @@ _INFOCOM 2019_
 ---
 ### Files
 - mvsketch.hpp. mvsketch.cpp: the implementation of MV-Sketch
-- mvsketch\_simd.hpp, mvsketch\_simd.cpp: the simd version of MV-Sketch
+- mvsketch\_simd.hpp, mvsketch\_simd.cpp: the SIMD version of MV-Sketch
 - main\_hitter.cpp: example about heavy hitter detection
 - main\_changer.cpp: example about heavy changer detection
 - main\_simd.cpp: example about heavy hitter detection with SIMD optimized

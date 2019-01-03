@@ -1,0 +1,113 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>
+    MV-Sketch: A Fast and Compact Invertible Sketch for Heavy Flow Detection in Network Data Streams
+</title>
+<style type="text/css">
+	@charset "utf-8";
+	body {
+		background-color: #F0FFF0;
+	}
+
+	body, td, th {
+		color: #000;
+	}
+
+	h1, h2 {
+		font-family: Times New Roman, Times, serif;
+		color: #663300;
+	}
+
+	h3, h4, h5, h6 {
+		color: #996633;
+	}
+
+	a {
+		color: #348017;
+	}
+</style><style type="text/css"></style></head>
+
+<body>
+
+<h1 align="center" class="h1style">
+        MV-Sketch: A Fast and Compact Invertible Sketch for Heavy Flow Detection in Network Data Streams
+</h1>
+
+<h2>Introduction</h2>
+<p>
+Fast detection of heavy flows (e.g., heavy hitters and heavy changers) in
+massive network traffic is challenging due to the stringent requirements
+of fast packet processing and limited resource availability.  Invertible
+sketches are summary data structures that can recover heavy flows with small
+memory footprints and bounded errors, yet existing invertible sketches incur
+high memory access overhead that leads to performance degradation.  We present
+MV-Sketch, a fast and compact invertible sketch that supports heavy flow
+detection with small and static memory allocation.  MV-Sketch tracks candidate
+heavy flows inside the sketch data structure via the idea of majority voting,
+such that it incurs small memory access overhead in both update and query
+operations, while achieving high detection accuracy.  We present theoretical
+analysis on the memory usage, performance, and accuracy of MV-Sketch.
+Trace-driven evaluation shows that MV-Sketch achieves higher accuracy 
+than existing invertible sketches, with up to 3.38$\times$ throughput gain.
+We also show how to boost the performance of MV-Sketch with SIMD instructions. 
+
+</p>
+
+
+<h2>Publication</h2>
+<ul>
+    <li>
+        Lu Tang, Qun Huang, and Patrick P. C. Lee 
+        <br>
+        <b>"MV-Sketch: A Fast and Compact Invertible Sketch for Heavy Flow Detection in Network Data Streams"</b>
+        <br>
+        IEEE International Conference on Computer Communications (INFOCOM) 29 April - 2 May 2019 // Paris, France
+        <br>
+        [<a href="http://www.cse.cuhk.edu.hk/~pclee/www/pubs/infocom19mvsketch.pdf">pdf</a>]
+        [<a href="http://adslab.cse.cuhk.edu.hk/software/mvsketch">software</a>]
+    </li>
+</ul>
+
+<h2>Download</h2>
+<ul>
+    <li>Version 1.0.0 (December 2018): 
+        <a
+            href="http://adslab.cse.cuhk.edu.hk/software/mvsketch/mvsketch-1.0.0.tar.gz">mvsketch-1.0.0.tar.gz</a>
+        (md5sum: e2cc0a2a05d4b19f2897ff5191e34cb9)
+    </li>
+<li>
+    README is included in the tarball. 
+</li>
+<li> 
+   Please also refer to the GitHub page: <a
+       href="https://github.com/Grace-TL/MV-Sketch">https://github.com/Grace-TL/MV-Sketch</a> 
+ </li>
+</ul>
+
+<!-- 
+<h2>People</h2>
+
+<p>
+SimEDC is developed by the 
+<a href="http://adslab.cse.cuhk.edu.hk/">Applied Distributed Systems Lab</a> 
+in the 
+<a href="http://www.cse.cuhk.edu.hk/">Department of Computer Science and Engineering</a> 
+at the <a href="http://www.cuhk.edu.hk/">Chinese University of Hong Kong</a> (CUHK).
+</p>
+
+
+<ul>
+	<li>Mi Zhang</li>
+	<li>Shujie Han</li>
+	<li>Patrick P. C. Lee</li>
+</ul>
+-->
+
+<p>
+Please contact ltang@cse.cuhk.edu.hk if you have any questions.</p>
+
+<h2>License</h2>
+The source code of MV-Sketch is released under the GNU/GPL license. 
+
+</body>
+</html>

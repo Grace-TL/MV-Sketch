@@ -104,11 +104,14 @@ Adaptor::Adaptor(std::string filename, uint64_t buffersize) {
                 srcport = 0;
                 dstport = 0;
             }
-            memcpy(p, &(ip_hdr->ip_src.s_addr), sizeof(uint32_t));
-            memcpy(p+sizeof(uint32_t), &(ip_hdr->ip_dst.s_addr), sizeof(uint32_t));
+            int srcip = ntohl(ip_hdr->ip_src.s_addr);
+            int dstip = ntohl(ip_hdr->ip_dst.s_addr);
+            uint8_t protocol = (uint8_t)ntohs(ip_hdr->ip_p);
+            memcpy(p, &srcip, sizeof(uint32_t));
+            memcpy(p+sizeof(uint32_t), &dstip, sizeof(uint32_t));
             memcpy(p+sizeof(uint32_t)*2, &srcport, sizeof(uint16_t));
             memcpy(p+sizeof(uint16_t)*5, &dstport, sizeof(uint16_t));
-            memcpy(p+sizeof(uint32_t)*3, &(ip_hdr->ip_p), sizeof(uint8_t));
+            memcpy(p+sizeof(uint32_t)*3, &protocol, sizeof(uint8_t));
             memcpy(p+sizeof(uint8_t)*13, &iplen, sizeof(uint16_t));
             p += sizeof(uint8_t)*13+sizeof(uint16_t);
             data->cnt++;

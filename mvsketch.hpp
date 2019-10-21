@@ -66,7 +66,13 @@ class MVSketch {
 
     void Reset();
 
+    void MergeAll(MVSketch** mv_arr, int size);
+
     private:
+
+    void SetBucket(int row, int column, val_tp sum, long count, unsigned char* key);
+
+    MVSketch::SBucket** GetTable();
 
     MV_type mv_;
 };

@@ -156,3 +156,61 @@ void MVSketch::Reset() {
     }
 }
 
+void MVSketch::SetBucket(int row, int column, val_tp sum, long count, unsigned char* key) {
+    int index = row * mv_.width + column;
+    mv_.counts[index]->sum = sum;
+    mv_.counts[index]->count = count;
+    memcpy(mv_.counts[index]->key, key, mv_.lgn/8);
+}
+
+MVSketch::SBucket** MVSketch::GetTable() {
+    return mv_.counts;
+}
+
+void MVSketch::MergeAll(MVSketch** mv_arr, int size) {
+  long countarr[size];
+  val_tp sumarr[size];
+  unsigned char* keyarr[size];
+  long est[size];
+
+  for (int d = 0; d < mv_.depth; d++) {
+    for (int w = 0; w < mv_.width; w++) {
+      val_tp total = 0;
+      for (int i = 0; i < size; i++) {
+        //find the majority and its estimate
+        MVSketch* cursk = mv_arr[i];
+        MVSketch::SBucket** table = (cursk)->GetTable();
+        int index = d*mv_.width+w;
+        countarr[i] = table[index]->count;
+        sumarr[i] = table[index]->sum;
+        keyarr[i] = table[index]->key;
+        total += sumarr[i];
+      }
+
+      int pointer = 0;
+      long counttmp = 0;
+      for (int i = 0; i  < size; i++) {
+        est[i] = 0;
+        for (int j = 0; j < size; j++) {
+          if (memcmp(keyarr[i], keyarr[j], mv_.lgn/8) == 0) {
+            est[i] += (sumarr[j] + countarr[j])/2;
+          } else {
+            est[i] += (sumarr[j] - countarr[j])/2;
+          }
+        }
+        if (est[i] > est[pointer]) pointer = i;
+      }
+      counttmp = 2 * est[pointer] - total;
+      counttmp = counttmp > 0 ? counttmp : 0;
+      if (counttmp == 0) {
+          SetBucket(d, w, 2*est[pointer], counttmp, keyarr[pointer]);
+      } else {
+          SetBucket(d, w, total, counttmp, keyarr[pointer]);
+      }
+    }
+  }
+}
+
+
+
+

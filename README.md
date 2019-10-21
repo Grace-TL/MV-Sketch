@@ -16,7 +16,8 @@ _INFOCOM 2019_
 - main\_changer.cpp: example about heavy changer detection
 - main\_simd.cpp: example about heavy hitter detection with SIMD optimized
   MV-Sketch
-
+- p4/mv\_32.p4: p4 implementation of MV-Sketch for 32-bit flow key
+- p4/mv\_104.p4: p4 implementation of MV-Sketch for 5-tuple flow key
 ---
 
 ### Compile and Run the examples

@@ -23,11 +23,9 @@ uint64_t AwareHash_debug(unsigned char* data, uint64_t n,
         uint64_t hash, uint64_t scale, uint64_t hardener) {
 
 	while (n) {
-        fprintf(stderr, "    %lu %lu %lu %u\n", n, hash, scale, *data);
 		hash *= scale;
 		hash += *data++;
 		n--;
-        fprintf(stderr, "        internal %lu\n", hash);
 	}
 	return hash ^ hardener;
 }

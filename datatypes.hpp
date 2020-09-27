@@ -12,7 +12,7 @@ typedef struct key_t_s {
     unsigned char key[LGN];
 } key_tp;
 
-typedef uint64_t val_tp;
+typedef int val_tp;
 
 /**
  * Object for hash
